@@ -1,0 +1,4 @@
+discord.py
+python-dotenv
+pytz
+aiohttp==3.8.5
