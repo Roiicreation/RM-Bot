@@ -384,7 +384,7 @@ class TicketView(discord.ui.View):
                     "<:inform:1309199465328017499> | INFORMAZIONI IMPORTANTI:\n\n"
                     "<:ticketrm:1309203090028761098> | I Ticket sono completamente privati, solo i membri dello STAFF hanno accesso a questo canale.\n\n"
                     "<:tagrm:1309200275659161670> | Evita di TAGGARE, attendi che un membro dello STAFF sia disponibile per aiutarti.\n\n"
-                    "<:membrorm:1309200450825883708 | Ticket preso in carico da: "
+                    "<:membrorm:1309200450825883708> | Ticket preso in carico da: "
                     "\n\n"
                 ),
                 color=0xfb8801
