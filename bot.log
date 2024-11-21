@@ -21,3 +21,238 @@
 2024-11-21 01:52:45,607 - INFO - logging in using static token
 2024-11-21 01:54:49,891 - INFO - logging in using static token
 2024-11-21 01:54:50,877 - INFO - Shard ID None has connected to Gateway (Session ID: 600270230cd9dd6a2cefdd2d2735cceb).
+2024-11-21 02:30:04,046 - INFO - logging in using static token
+2024-11-21 02:30:05,117 - INFO - Shard ID None has connected to Gateway (Session ID: 459a8687e7c1387e0bda1f0fdfa82b81).
+2024-11-21 03:20:17,199 - INFO - logging in using static token
+2024-11-21 03:20:18,349 - INFO - Shard ID None has connected to Gateway (Session ID: 80e03c602048e0d780d03973110429a0).
+2024-11-21 03:21:24,772 - INFO - logging in using static token
+2024-11-21 03:21:27,864 - INFO - logging in using static token
+2024-11-21 03:21:28,853 - INFO - Shard ID None has connected to Gateway (Session ID: c96d50f4057ba4c697102d25aae285c9).
+2024-11-21 03:21:37,684 - ERROR - Ignoring exception in view <TicketView timeout=None children=2> for item <Button style=<ButtonStyle.primary: 1> url=None disabled=False label='Compra Prodotto' emoji=None row=0 sku_id=None>
+Traceback (most recent call last):
+  File "D:\bot discord\RM Bot\bot.py", line 294, in compra_callback
+    temp_message = await interaction.response.send_message(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\interactions.py", line 827, in send_message
+    raise InteractionResponded(self._parent)
+discord.errors.InteractionResponded: This interaction has already been responded to before
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\ui\view.py", line 430, in _scheduled_task
+    await item.callback(interaction)
+  File "D:\bot discord\RM Bot\bot.py", line 301, in compra_callback
+    await interaction.response.send_message(
+  File "C:\Python312\Lib\site-packages\discord\interactions.py", line 827, in send_message
+    raise InteractionResponded(self._parent)
+discord.errors.InteractionResponded: This interaction has already been responded to before
+2024-11-21 03:21:49,164 - INFO - logging in using static token
+2024-11-21 03:21:52,940 - INFO - logging in using static token
+2024-11-21 03:21:53,922 - INFO - Shard ID None has connected to Gateway (Session ID: 13f3b50f5e2398e8c6add50a46729b80).
+2024-11-21 03:22:14,809 - ERROR - Ignoring exception in modal <CloseTicketModal timeout=None children=1>:
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\ui\modal.py", line 189, in _scheduled_task
+    await self.on_submit(interaction)
+  File "D:\bot discord\RM Bot\bot.py", line 95, in on_submit
+    current_time = datetime.utcnow() + timedelta(hours=1)
+                   ^^^^^^^^^^^^^^^
+AttributeError: module 'datetime' has no attribute 'utcnow'
+2024-11-21 03:23:56,620 - INFO - logging in using static token
+2024-11-21 03:23:58,398 - INFO - logging in using static token
+2024-11-21 03:23:59,585 - INFO - Shard ID None has connected to Gateway (Session ID: 96f8907059b3498c11c6d9f46bc01ff7).
+2024-11-21 03:25:39,884 - INFO - logging in using static token
+2024-11-21 03:25:44,556 - INFO - logging in using static token
+2024-11-21 03:25:45,614 - INFO - Shard ID None has connected to Gateway (Session ID: 7935cc9edd66f03b4f0184ffd9988992).
+2024-11-21 03:26:39,108 - INFO - logging in using static token
+2024-11-21 03:26:40,968 - INFO - logging in using static token
+2024-11-21 03:26:42,062 - INFO - Shard ID None has connected to Gateway (Session ID: 209b5744f61bb68d8ec534e977a6ca7e).
+2024-11-21 03:30:50,068 - INFO - logging in using static token
+2024-11-21 03:30:51,743 - INFO - logging in using static token
+2024-11-21 03:30:52,890 - INFO - Shard ID None has connected to Gateway (Session ID: 46ecc0c5e6820a0a45f1ff69befb137c).
+2024-11-21 03:32:44,028 - INFO - logging in using static token
+2024-11-21 03:32:46,562 - INFO - logging in using static token
+2024-11-21 03:32:47,594 - INFO - Shard ID None has connected to Gateway (Session ID: d14e6fe487795501cf8604f6cc306cb4).
+2024-11-21 03:35:24,033 - INFO - logging in using static token
+2024-11-21 03:35:24,980 - INFO - Shard ID None has connected to Gateway (Session ID: 1749b8aca69fd1ebe5df39fc368ae195).
+2024-11-21 04:33:13,565 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 06:53:33,165 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 09:53:01,711 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 10:20:40,817 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 10:42:29,051 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 12:25:40,791 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 12:34:21,168 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 12:49:21,705 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 13:58:27,358 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 15:03:19,578 - INFO - Shard ID None has successfully RESUMED session 1749b8aca69fd1ebe5df39fc368ae195.
+2024-11-21 15:20:31,459 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:22:49,856 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:22:50,084 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:22:50,107 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:23:20,049 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:23:20,099 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:23:20,439 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:23:50,518 - ERROR - Ignoring exception in on_member_join
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "D:\bot discord\RM Bot\bot.py", line 57, in on_member_join
+    await member.add_roles(role)  # Assegna il ruolo al nuovo membro
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\site-packages\discord\member.py", line 1083, in add_roles
+    await req(guild_id, user_id, role.id, reason=reason)
+  File "C:\Python312\Lib\site-packages\discord\http.py", line 752, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:32:11,989 - INFO - logging in using static token
+2024-11-21 15:32:15,459 - INFO - logging in using static token
+2024-11-21 15:32:16,930 - INFO - Shard ID None has connected to Gateway (Session ID: 8dd191fc3f75c8e4b9bf64af4fea635e).
+2024-11-21 15:38:02,079 - ERROR - Errore nell'assegnazione del ruolo: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:38:56,453 - INFO - logging in using static token
+2024-11-21 15:39:02,882 - INFO - logging in using static token
+2024-11-21 15:39:04,019 - INFO - Shard ID None has connected to Gateway (Session ID: de0781245e7a3bebf13ba7e91421be70).
+2024-11-21 15:39:19,384 - ERROR - Errore nell'assegnazione del ruolo: 403 Forbidden (error code: 50013): Missing Permissions
+2024-11-21 15:40:07,540 - INFO - logging in using static token
+2024-11-21 15:40:10,199 - INFO - logging in using static token
+2024-11-21 15:40:11,258 - INFO - Shard ID None has connected to Gateway (Session ID: 50fc275ec39b273b37a569ee33968bbd).
+2024-11-21 15:40:32,070 - INFO - Ruolo Membro assegnato a cleany0507
+2024-11-21 15:53:48,597 - INFO - logging in using static token
+2024-11-21 15:53:50,479 - INFO - logging in using static token
+2024-11-21 15:53:51,660 - INFO - Shard ID None has connected to Gateway (Session ID: d0e63cfc4636037953837799b04c5824).
+2024-11-21 15:56:51,277 - INFO - logging in using static token
+2024-11-21 15:56:52,766 - INFO - logging in using static token
+2024-11-21 15:56:53,949 - INFO - Shard ID None has connected to Gateway (Session ID: e98ce41a575a934dc4b2082fbaca0d07).
+2024-11-21 15:58:18,789 - INFO - logging in using static token
+2024-11-21 15:58:20,360 - INFO - logging in using static token
+2024-11-21 15:58:21,359 - INFO - Shard ID None has connected to Gateway (Session ID: 15c5bab6549117643fe7d05edc6d1c43).
+2024-11-21 15:58:52,664 - ERROR - Ignoring exception in view <TicketManageView timeout=None children=2> for item <Button style=<ButtonStyle.secondary: 2> url=None disabled=False label='Rivendica Ticket' emoji=<PartialEmoji animated=False name='rmrive' id=1308904323991994428> row=None sku_id=None>
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\ui\view.py", line 430, in _scheduled_task
+    await item.callback(interaction)
+  File "D:\bot discord\RM Bot\bot.py", line 239, in claim_ticket
+    description_lines[i+1] = f"{interaction.user.mention}"
+    ~~~~~~~~~~~~~~~~~^^^^^
+IndexError: list assignment index out of range
+2024-11-21 15:59:26,269 - INFO - logging in using static token
+2024-11-21 15:59:27,665 - INFO - logging in using static token
+2024-11-21 15:59:28,997 - INFO - Shard ID None has connected to Gateway (Session ID: ae942ed79f896c4a56bb2b41ac0b44df).
+2024-11-21 16:00:57,181 - INFO - logging in using static token
+2024-11-21 16:00:58,939 - INFO - logging in using static token
+2024-11-21 16:01:00,272 - INFO - Shard ID None has connected to Gateway (Session ID: e1fafdf06c3ce157b3a13a392a42e01f).
+2024-11-21 16:02:05,436 - INFO - logging in using static token
+2024-11-21 16:02:06,671 - INFO - logging in using static token
+2024-11-21 16:02:07,840 - INFO - Shard ID None has connected to Gateway (Session ID: c55405384f1a98a840acac9efdf3d7ca).
+2024-11-21 16:03:44,781 - INFO - logging in using static token
+2024-11-21 16:04:17,296 - INFO - logging in using static token
+2024-11-21 16:04:18,447 - INFO - Shard ID None has connected to Gateway (Session ID: f7c7ef2f36dbf25fe4f34a86fccf7fc3).
+2024-11-21 16:04:54,676 - INFO - logging in using static token
+2024-11-21 16:04:56,316 - INFO - logging in using static token
+2024-11-21 16:04:57,501 - INFO - Shard ID None has connected to Gateway (Session ID: 2fe4bc3e5d6cceddea9a79b7e0bf2512).
+2024-11-21 16:06:57,244 - INFO - logging in using static token
+2024-11-21 16:06:58,462 - INFO - logging in using static token
+2024-11-21 16:06:59,585 - INFO - Shard ID None has connected to Gateway (Session ID: 1eaf47f6ef21ce84b2013f18bb9145c4).
+2024-11-21 16:07:17,881 - ERROR - Ignoring exception in modal <CloseTicketModal timeout=None children=1>:
+Traceback (most recent call last):
+  File "C:\Python312\Lib\site-packages\discord\ui\modal.py", line 189, in _scheduled_task
+    await self.on_submit(interaction)
+  File "D:\bot discord\RM Bot\bot.py", line 179, in on_submit
+    await transcripts_channel.send(embed=embed)
+          ^^^^^^^^^^^^^^^^^^^
+NameError: name 'transcripts_channel' is not defined
+2024-11-21 16:07:54,517 - INFO - logging in using static token
+2024-11-21 16:07:55,954 - INFO - logging in using static token
+2024-11-21 16:07:57,003 - INFO - Shard ID None has connected to Gateway (Session ID: e154b10588c700fedd917f337c1ae3ea).
+2024-11-21 16:08:18,885 - INFO - logging in using static token
+2024-11-21 16:08:20,046 - INFO - logging in using static token
+2024-11-21 16:08:21,101 - INFO - Shard ID None has connected to Gateway (Session ID: faffd4cce4d3c4396470d180ad25dfad).
+2024-11-21 16:09:39,188 - INFO - logging in using static token
+2024-11-21 16:09:40,160 - INFO - Shard ID None has connected to Gateway (Session ID: 17987df0ce615d5e85ba0f1be76cfba6).
+2024-11-21 16:18:27,471 - INFO - Shard ID None session has been invalidated.
+2024-11-21 16:18:37,945 - INFO - logging in using static token
+2024-11-21 16:18:42,950 - INFO - logging in using static token
+2024-11-21 16:18:47,954 - INFO - logging in using static token
+2024-11-21 16:18:52,958 - INFO - logging in using static token
+2024-11-21 16:18:57,964 - INFO - logging in using static token
+2024-11-21 16:19:02,969 - INFO - logging in using static token
+2024-11-21 16:19:07,975 - INFO - logging in using static token
+2024-11-21 16:19:12,980 - INFO - logging in using static token
+2024-11-21 16:19:17,984 - INFO - logging in using static token
+2024-11-21 16:19:22,990 - INFO - logging in using static token
+2024-11-21 16:19:28,002 - INFO - logging in using static token

@@ -1,0 +1,9 @@
+# File di configurazione con dati sensibili
+config.py
+
+# File di cache Python
+__pycache__/
+*.pyc
+
+# File di log
+*.log 

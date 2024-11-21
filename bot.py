@@ -1,18 +1,15 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ui import View, Button
 import os
 import asyncio
-import datetime
-import pytz
-from discord.ext import tasks
+from datetime import datetime, timedelta
 import itertools
 import time
 from dotenv import load_dotenv
 import logging
-
-# Aggiungi all'inizio del file
-load_dotenv()
+from datetime import timezone
+from config import TOKEN
 
 # Configurazione degli intents
 intents = discord.Intents.default()
@@ -50,16 +47,37 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    role_name = "Membro"
-    guild = member.guild  # Prendi il server (guild) dove l'utente si è unito
-    role = discord.utils.get(guild.roles, name=role_name)
-    
-    if role:
-        await member.add_roles(role)  # Assegna il ruolo al nuovo membro
-        print(f"Ruolo Membro assegnato a {member.name}")
-
-    else:
-        print(f"Ruolo Membro non trovato!")
+    try:
+        # Stampa di debug
+        print(f"Nuovo membro entrato: {member.name}")
+        
+        # Lista dei possibili nomi del ruolo (per gestire variazioni maiuscole/minuscole)
+        possible_role_names = ["Membro", "membro", "MEMBRO"]
+        
+        guild = member.guild
+        role = None
+        
+        # Cerca il ruolo tra le possibili varianti
+        for role_name in possible_role_names:
+            role = discord.utils.get(guild.roles, name=role_name)
+            if role:
+                break
+        
+        if role:
+            await member.add_roles(role)
+            print(f"Ruolo {role.name} assegnato a {member.name}")
+            logging.info(f"Ruolo {role.name} assegnato a {member.name}")
+        else:
+            print(f"Ruolo Membro non trovato. Ruoli disponibili: {[r.name for r in guild.roles]}")
+            logging.error(f"Ruolo Membro non trovato. Ruoli disponibili: {[r.name for r in guild.roles]}")
+            # Crea il ruolo se non esiste
+            role = await guild.create_role(name="Membro", reason="Ruolo automatico per nuovi membri")
+            await member.add_roles(role)
+            logging.info(f"Creato e assegnato nuovo ruolo Membro a {member.name}")
+            
+    except Exception as e:
+        print(f"Errore nell'assegnazione del ruolo: {str(e)}")
+        logging.error(f"Errore nell'assegnazione del ruolo: {str(e)}")
 
 # Prima definisci la classe Modal
 class CloseTicketModal(discord.ui.Modal, title="Chiusura Ticket"):
@@ -76,33 +94,32 @@ class CloseTicketModal(discord.ui.Modal, title="Chiusura Ticket"):
         
         # Mappa dei tipi di ticket basata sul nome del canale
         ticket_types = {
-            "compra": "Acquisto Prodotto",
-            "supporto": "Supporto Generale",
+            "compra": "Compra Prodotto",
+            "supporto": "Supporto / Aiuto",
             "bug": "Segnalazione Bug",
             "partner": "Richiesta Partnership"
-            # Aggiungi altri tipi secondo necessità
         }
 
-        # Determina il tipo di ticket dal nome del canale
-        channel_name = interaction.channel.name.lower()
-        ticket_type = next(
-            (tipo for chiave, tipo in ticket_types.items() if chiave in channel_name),
-            "Supporto Generale"  # Valore predefinito se nessuna corrispondenza trovata
-        )
+        # Determina il tipo di ticket dalla categoria del canale
+        category_name = interaction.channel.category.name.lower()
+        if "purchase" in category_name:
+            ticket_type = "Compra Prodotto"
+        elif "support" in category_name:
+            ticket_type = "Supporto / Aiuto"
+        else:
+            ticket_type = "Supporto / Aiuto"  # Default fallback
         
-        # Imposta il fuso orario italiano
-        timezone_IT = pytz.timezone('Europe/Rome')
-        
-        # Converti i tempi nel fuso orario italiano
-        channel_created_at = interaction.channel.created_at.astimezone(timezone_IT)
-        current_time = datetime.datetime.now(timezone_IT)
+        # Sostituisci la gestione del fuso orario
+        # Aggiungi 1 ora per il fuso orario italiano (UTC+1)
+        channel_created_at = interaction.channel.created_at + timedelta(hours=1)
+        current_time = datetime.now(timezone.utc) + timedelta(hours=1)
         
         # Calcola la durata
         duration = current_time - channel_created_at
         duration_seconds = int(duration.total_seconds())
         
         # Formatta le date in italiano
-        mesi_ita = {
+        mesi_ita = {  
             1: "gennaio", 2: "febbraio", 3: "marzo", 4: "aprile",
             5: "maggio", 6: "giugno", 7: "luglio", 8: "agosto",
             9: "settembre", 10: "ottobre", 11: "novembre", 12: "dicembre"
@@ -139,7 +156,7 @@ class CloseTicketModal(discord.ui.Modal, title="Chiusura Ticket"):
         )
         embed.add_field(
             name="📘 | Categoria del Ticket",
-            value=ticket_type,  # Usa il tipo di ticket corretto
+            value=ticket_type,
             inline=False
         )
         embed.add_field(
@@ -185,6 +202,48 @@ class CloseTicketModal(discord.ui.Modal, title="Chiusura Ticket"):
         # Elimina il canale del ticket
         await interaction.channel.delete()
 
+# Sposta questa classe fuori dai callback, prima della classe TicketView
+class TicketManageView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        
+    @discord.ui.button(
+        label=" Chiudi Ticket", 
+        emoji="<:rmchiudi:1308904349635969134>",
+        style=discord.ButtonStyle.secondary,
+        custom_id="close_ticket"
+    )
+    async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_modal(CloseTicketModal())
+
+    @discord.ui.button(
+        label=" Rivendica Ticket", 
+        emoji="<:rmrive:1308904323991994428>",
+        style=discord.ButtonStyle.secondary,
+        custom_id="claim_ticket"
+    )
+    async def claim_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message(
+            f"Ticket preso in carico da {interaction.user.mention}",
+            ephemeral=False,
+            delete_after=5.0 
+        )
+        
+        # Aggiorna l'embed originale per mostrare chi ha preso in carico il ticket
+        embed = interaction.message.embeds[0]
+        description_lines = embed.description.split('\n')
+        
+        # Cerca la linea che contiene "Ticket preso in carico da"
+        for i, line in enumerate(description_lines):
+            if "Ticket preso in carico da:" in line or "preso in carico da:" in line:
+                # Modifica direttamente la linea corrente invece di quella successiva
+                description_lines[i] = f"<:rmadmin:1308902179243032616> | Ticket preso in carico da: {interaction.user.mention}"
+                break
+        
+        # Ricostruisci la descrizione
+        embed.description = '\n'.join(description_lines)
+        await interaction.message.edit(embed=embed)
+
 # Classe per creare la vista con i pulsanti
 class TicketView(discord.ui.View):
     def __init__(self):
@@ -196,26 +255,25 @@ class TicketView(discord.ui.View):
         custom_id="buy_product"
     )
     async def compra_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
-        button.style = discord.ButtonStyle.primary
-        button.color = discord.Color.from_rgb(251, 136, 1)  # RGB per #fb8801
         try:
-            # Controlla se l'utente ha già un ticket aperto
+            # Controllo ticket esistente
             existing_ticket = discord.utils.get(interaction.guild.channels, 
                 name=f"ticket-{interaction.user.name.lower()}")
             
             if existing_ticket:
                 await interaction.response.send_message(
                     f"Hai già un ticket aperto: {existing_ticket.mention}", 
-                    ephemeral=True
+                    ephemeral=True,
+                    delete_after=5.0
                 )
                 return
 
-            # Cerca la categoria "ticket aperti"
-            category = discord.utils.get(interaction.guild.categories, name="ticket aperti")
+            # Cerca la categoria "ticket purchase"
+            category = discord.utils.get(interaction.guild.categories, name="ticket purchase")
             if not category:
                 # Se non esiste, creala
-                category = await interaction.guild.create_category("ticket aperti")
-                print(f"Categoria 'ticket aperti' creata")
+                category = await interaction.guild.create_category("ticket purchase")
+                print(f"Categoria 'ticket purchase' creata")
 
             # Imposta i permessi del canale
             overwrites = {
@@ -235,58 +293,22 @@ class TicketView(discord.ui.View):
             embed = discord.Embed(
                 title="RM Shop - Sistema di Assistenza",
                 description=(
-                    "<a:rmalert:1308900242409918618> | Benvenuto/a nel tuo ticket\n\n"
+                    "## <:logorm:1308916945852170291> | Benvenuto/a nel tuo ticket\n\n"
                     "<:rmfolder:1308900703602999377> | Categoria del Ticket:\n"
+                    "Ticket Compra Prodotto\n"
                     "\n"
                     "<a:rmalert:1308900242409918618> | INFORMAZIONI IMPORTANTI:\n\n"
-                    " | TICKET sono completamente privati, solo i membri dello STAFF hanno accesso a questo canale.\n\n"
-                    "<a:rmalert:1308900242409918618> | Evita di fare TAG, attendi che un membro dello STAFF sia disponibile per aiutarti.\n\n"
-                    "👥 | Ticket preso in carico da: "
+                    "<:ticketrm:1309168374403694672> | I ticket sono completamente privati, solo i membri dello STAFF hanno accesso a questo canale.\n\n"
+                    "<:notagrm:1309168814822527108> | Evita di TAGGARE, attendi che un membro dello STAFF sia disponibile per aiutarti.\n\n"
+                    "<:rmadmin:1308902179243032616> | Ticket preso in carico da: "
                     "\n\n"
-                    "✅ | Questo canale è destinato al tuo SUPPORTO, sentiti libero di dire ciò di cui hai bisogno!\n\n"
                 ),
                 color=0xfb8801
             )
-            embed.set_footer(text="Grazie per aver scelto i nostri servizi", icon_url="https://cdn.discordapp.com/attachments/825772229152604220/1308480493406257192/rmshops.png?ex=673ec1ac&is=673d702c&hm=f884451f50feaf65967d30472ce22d4b7e0345c3dcbadac28683fbf51d9a3abf&")
+            embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/825772229152604220/1309170964835340288/rmshooop.png?ex=67409bf9&is=673f4a79&hm=e04de21733922f555eac914f23f6355b5f9b50d48f3bc627c53df03a18b0ae39&")
+            embed.set_footer(text="Questo canale è destinato al tuo SUPPORTO, sentiti libero di dire ciò di cui hai bisogno!", icon_url="https://cdn.discordapp.com/attachments/825772229152604220/1308480493406257192/rmshops.png?ex=673ec1ac&is=673d702c&hm=f884451f50feaf65967d30472ce22d4b7e0345c3dcbadac28683fbf51d9a3abf&")
 
             # Modifica la vista per includere tutti i pulsanti necessari
-            class TicketManageView(discord.ui.View):
-                def __init__(self):
-                    super().__init__(timeout=None)
-                    
-                # Aggiungi i pulsanti
-                @discord.ui.button(
-                    label=" Chiudi Ticket", 
-                    emoji="<:rmchiudi:1308904349635969134>",
-                    style=discord.ButtonStyle.secondary,
-                    custom_id="close_ticket"
-                )
-                async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
-                    await interaction.response.send_modal(CloseTicketModal())
-
-                @discord.ui.button(
-                    label=" Rivendica Ticket", 
-                    emoji="<:rmrive:1308904323991994428>",
-                    style=discord.ButtonStyle.secondary,
-                    custom_id="claim_ticket"
-                )
-                async def claim_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
-                    await interaction.response.send_message(
-                        f"Ticket preso in carico da {interaction.user.mention}",
-                        ephemeral=False,
-                        delete_after=5.0 
-                    )
-                    
-                    # Aggiorna l'embed originale per mostrare chi ha preso in carico il ticket
-                    embed = interaction.message.embeds[0]
-                    description_lines = embed.description.split('\n')
-                    for i, line in enumerate(description_lines):
-                        if "Ticket preso in carico da:" in line:
-                            description_lines[i+1] = f"{interaction.user.mention}"
-                    
-                    embed.description = '\n'.join(description_lines)
-                    await interaction.message.edit(embed=embed)
-
             manage_view = TicketManageView()
             await channel.send(embed=embed, view=manage_view)
             
@@ -306,46 +328,67 @@ class TicketView(discord.ui.View):
     @discord.ui.button(label="Supporto / Aiuto", style=discord.ButtonStyle.blurple)
     async def supporto_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
         try:
-            # Simile al codice sopra ma per ticket di supporto
+            # Controllo ticket esistente
             existing_ticket = discord.utils.get(interaction.guild.channels, 
                 name=f"ticket-{interaction.user.name.lower()}")
             
             if existing_ticket:
                 await interaction.response.send_message(
                     f"Hai già un ticket aperto: {existing_ticket.mention}", 
-                    ephemeral=True
+                    ephemeral=True,
+                    delete_after=5.0
                 )
                 return
 
-            category = discord.utils.get(interaction.guild.categories, name="Ticket")
+            # Cerca la categoria "ticket support"
+            category = discord.utils.get(interaction.guild.categories, name="ticket support")
             if not category:
-                category = await interaction.guild.create_category("Ticket")
+                # Se non esiste, creala
+                category = await interaction.guild.create_category("ticket support")
+                print(f"Categoria 'ticket support' creata")
 
+            # Imposta i permessi del canale
             overwrites = {
                 interaction.guild.default_role: discord.PermissionOverwrite(view_channel=False),
                 interaction.user: discord.PermissionOverwrite(view_channel=True, send_messages=True),
                 interaction.guild.me: discord.PermissionOverwrite(view_channel=True, send_messages=True)
             }
 
+            # Crea il canale nella categoria corretta
             channel = await interaction.guild.create_text_channel(
                 name=f"ticket-{interaction.user.name.lower()}",
                 category=category,
                 overwrites=overwrites
             )
 
+            # Nuovo embed con lo stesso formato
             embed = discord.Embed(
-                title="Nuovo Ticket Supporto",
-                description=f"Ticket creato da {interaction.user.mention}\n"
-                           f"Un membro del nostro staff ti risponderà il prima possibile.",
-                color=discord.Color.green()
+                title="RM Shop - Sistema di Assistenza",
+                description=(
+                    "<a:rmalert:1308900242409918618> | Benvenuto/a nel tuo ticket\n\n"
+                    "<:rmfolder:1308900703602999377> | Categoria del Ticket:\n"
+                    "Ticket Supporto\n"
+                    "\n"
+                    "<a:rmalert:1308900242409918618> | INFORMAZIONI IMPORTANTI:\n\n"
+                    " | TICKET sono completamente privati, solo i membri dello STAFF hanno accesso a questo canale.\n\n"
+                    "<a:rmalert:1308900242409918618> | Evita di fare TAG, attendi che un membro dello STAFF sia disponibile per aiutarti.\n\n"
+                    "👥 | Ticket preso in carico da: "
+                    "\n\n"
+                    "✅ | Questo canale è destinato al tuo SUPPORTO, sentiti libero di dire ciò di cui hai bisogno!\n\n"
+                ),
+                color=0xfb8801
             )
+            embed.set_footer(text="Grazie per aver scelto i nostri servizi", icon_url="https://cdn.discordapp.com/attachments/825772229152604220/1308480493406257192/rmshops.png?ex=673ec1ac&is=673d702c&hm=f884451f50feaf65967d30472ce22d4b7e0345c3dcbadac28683fbf51d9a3abf&")
 
-            close_view = TicketCloseView()
-            await channel.send(embed=embed, view=close_view)
+            # Usa la stessa vista con i pulsanti di gestione
+            manage_view = TicketManageView()
+            await channel.send(embed=embed, view=manage_view)
             
+            # Messaggio di conferma temporaneo
             await interaction.response.send_message(
-                f"Ho creato il tuo ticket: {channel.mention}", 
-                ephemeral=True
+                f"Ho creato il tuo ticket: <#{channel.id}>",
+                ephemeral=True,
+                delete_after=5.0
             )
 
         except Exception as e:
@@ -424,11 +467,10 @@ async def ticket(ctx):
 def run_bot():
     while True:
         try:
-            token = os.getenv('DISCORD_TOKEN')
-            if token is None:
-                print("Token non trovato nel file .env!")
+            if TOKEN is None:
+                print("Token non configurato!")
                 break
-            bot.run(token, reconnect=True)
+            bot.run(TOKEN, reconnect=True)
         except discord.ConnectionClosed:
             print("Connessione persa. Tentativo di riconnessione...")
             time.sleep(5)
